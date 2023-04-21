@@ -1,5 +1,7 @@
 import tensorflow as tf
 import numpy as np
+
+#open the data file and returns as list
 def getData():
     data = list()
     with open("nestor files/mfeat-pix.txt", 'r') as file:
@@ -12,7 +14,7 @@ def getData():
             data.append(lines)
     return data
 
-
+#split the data into test and training + convert to  tensors
 def splitData(data : list):
     counter = 0
     testData = list()
@@ -25,8 +27,11 @@ def splitData(data : list):
         counter += 1
         if counter == 200:
             counter = 0
+    testData = tf.convert_to_tensor(testData)
+    trainingData = tf.convert_to_tensor(trainingData)
     return testData, trainingData
 
+#returns a tensor of 1k ints with the first 100 being 0, the next 100 being 1, etc.
 def createLabelTensor():
     n = list()
     for i in range(1000):
@@ -34,13 +39,16 @@ def createLabelTensor():
     n = tf.convert_to_tensor(n)
     return n
 
+
 def initiateNetwork(sizesOfHiddenLayers : tuple):
     model = tf.keras.Sequential()
+    #Starting input layer
     model.add(tf.keras.layers.Dense(15 * 16))
 
     for LayerSize in sizesOfHiddenLayers:
         model.add(tf.keras.layers.Dense(LayerSize))
 
+    #Numbers 0-9, output layer
     model.add(tf.keras.layers.Dense(10))
     model.compile()
     return model

@@ -6,10 +6,8 @@ from functions import getData, splitData, initiateNetwork, createLabelTensor
 
 #Load and prepare data
 data = getData()
-training_data, test_data = splitData(data)
 
-training_data = tf.convert_to_tensor(training_data)
-test_data = tf.convert_to_tensor(test_data)
+training_data, test_data = splitData(data)
 
 target_data = createLabelTensor()
 
