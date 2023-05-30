@@ -1,10 +1,10 @@
 import tensorflow as tf
 import numpy as np
 
-def getData():
-    """"
-    function: Opens the text file
-    returns: data as list
+def getData() -> list:
+    """
+    :function: Opens the text file
+    :returns: data as list
     """
 
     data = list()
@@ -14,15 +14,15 @@ def getData():
             lines = list()
             for character in line:
                 if character.isdigit():
-                    lines.append(int(character))
+                    lines.append(int(character)/9.0)#read digit and normalize
             data.append(lines)
     return data
 
 
-def splitData(data : list):
-    """"
-    param: data as a list
-    return: data as tensors tensors
+def splitData(data : list) ->tuple(list,list):
+    """
+    :param: data as a list
+    :return: data as tensors tensors
     """
 
     counter = 0
@@ -41,8 +41,8 @@ def splitData(data : list):
     return testData, trainingData
 
 
-def createLabelTensor():
-    """"
+def createLabelTensor() ->tf.Tensor:
+    """
     returns: tensor with the target values
     """
 
@@ -54,7 +54,7 @@ def createLabelTensor():
 
 
 def initiateNetwork(sizesOfHiddenLayers : tuple):
-    """"
+    """
     param: tuple with the sizes of the hidden layers, etc.
     returns: default (feadforward) neural network
     """
