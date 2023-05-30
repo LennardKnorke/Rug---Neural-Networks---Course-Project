@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+import torch
 import matplotlib.pyplot as plt
 
 def getData() -> np.array:
@@ -33,19 +34,21 @@ def splitData(data : np.array, test_training_ratio : float) ->tuple:
     if test_training_ratio < 0.0 or test_training_ratio > 1.0:
         raise ValueError ("Enter a float x between: 0.0 <= x <= 1.0")
     test_size = int(2000 * test_training_ratio)
-
-
+    training_size = 2000 - test_size
+    if (test_size + training_size) !=2000:
+        raise ValueError ("Invalid Ratio")
+    
     testData = np.ndarray((test_size, 16, 15)) 
     test_idx = 0
-    trainingData = np.ndarray((2000 - test_size, 16, 15))
+    trainingData = np.ndarray((training_size, 16, 15))
     training_idx = 0
     #For every 10 number (0-9)
     for i in range(10):
-        #There are 200 entries
+        #There are 200 entries per number
         for k in range(200):
             idx = k + (i * 200)
             #If k over a limit, copy into training
-            if k < (test_training_ratio * 200):
+            if k < (training_size/10):
                 trainingData[training_idx] = data[idx]
                 training_idx += 1
             #Else copy into testing
@@ -59,33 +62,5 @@ def drawDigit(data : np.ndarray) ->None:
     return
             
 
-def createLabelTensor() ->tf.Tensor:
-    """
-    returns: tensor with the target values
-    """
 
-    n = list()
-    for i in range(1000):
-        n.append(int(i/100))
-    n = tf.convert_to_tensor(n)
-    return n
-
-
-def initiateNetwork(sizesOfHiddenLayers : tuple):
-    """
-    param: tuple with the sizes of the hidden layers, etc.
-    returns: default (feadforward) neural network
-    """
-
-    model = tf.keras.Sequential()
-    #Starting input layer
-    model.add(tf.keras.layers.Dense(15 * 16))
-
-    for LayerSize in sizesOfHiddenLayers:
-        model.add(tf.keras.layers.Dense(LayerSize))
-
-    #Numbers 0-9, output layer
-    model.add(tf.keras.layers.Dense(10))
-    model.compile()
-    return model
 
