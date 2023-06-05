@@ -1,0 +1,5 @@
+notes.txt
+*.zip
+.gitignore
+.idea
+.venv
